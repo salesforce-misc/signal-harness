@@ -286,12 +286,13 @@ structured event with a stable id:
 ```shell
 signal-harness notify RUN_ID review-42 --channel slack \
   --kind pull-request.review-requested --payload review.json
-signal-harness notify RUN_ID drive-W123 --channel work_items \
-  --kind work-item.drive.upsert --payload drive.json
+signal-harness notify RUN_ID feature-123 --channel work_items \
+  --kind work-item.feature.upsert --payload feature.json
 ```
 
-work-item providers use `work-item.drive.*`, `work-item.stage.*`,
-`work-item.task.*`, and `work-item.chatter.*` event kinds. Provider adapters
+Work-item providers can define `work-item.feature.*`, `work-item.stage.*`,
+`work-item.task.*`, and `work-item.comment.*` event kinds. These are examples;
+the distribution owns its event vocabulary. Provider adapters
 return an external id after a successful update. The engine records attempts,
 errors, delivery state, and external ids; replay never resends an already sent
 event. With no adapter configured, events remain pending and workflow semantics

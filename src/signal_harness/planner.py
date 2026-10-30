@@ -287,6 +287,39 @@ def _inferred_default_branch(root: Path) -> str:
     )
 
 
+def _local_ci_context(root: Path) -> tuple[str, ...]:
+    """Follow only repository-local GitLab includes, with bounded scope."""
+    pending = [".gitlab-ci.yml"]
+    selected: set[str] = set()
+    while pending:
+        pattern = pending.pop()
+        if Path(pattern).is_absolute() or ".." in Path(pattern).parts:
+            raise ConfigurationError("GitLab local include must stay inside the repository")
+        for candidate in root.glob(pattern):
+            resolved = candidate.resolve()
+            if not resolved.is_relative_to(root.resolve()):
+                raise ConfigurationError("GitLab local include escapes repository")
+            relative = candidate.relative_to(root).as_posix()
+            if not resolved.is_file() or relative in selected:
+                continue
+            selected.add(relative)
+            if len(selected) > 100:
+                raise ConfigurationError("GitLab local include context exceeds 100 files")
+            data = load_yaml(resolved)
+            includes = data.get("include", []) if isinstance(data, dict) else []
+            if not isinstance(includes, list):
+                includes = [includes]
+            for include in includes:
+                local = (
+                    include
+                    if isinstance(include, str)
+                    else (include.get("local") if isinstance(include, dict) else None)
+                )
+                if isinstance(local, str) and not local.startswith(("http://", "https://")):
+                    pending.append(local.lstrip("/"))
+    return tuple(sorted(selected))
+
+
 def infer_repository_profile(root: Path, repo_id: str, remote: str) -> RepositoryProfile:
     """Build a read-only, evidence-backed profile without modifying the repository."""
     required = tuple(
@@ -316,7 +349,7 @@ def infer_repository_profile(root: Path, repo_id: str, remote: str) -> Repositor
         default_branch=_inferred_default_branch(root),
         context=ContextConfig(
             required=required,
-            optional=optional,
+            optional=(*optional, *_local_ci_context(root)),
             exclude=(
                 ".git/**",
                 ".venv/**",

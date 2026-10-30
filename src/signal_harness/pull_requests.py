@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from .errors import ResolutionError
+from .forge import provider_for
 from .state import RunStore
 from .worktrees import verify_prepared_task
 
@@ -22,6 +23,7 @@ def pull_request_plan(
         raise ResolutionError("pull request title must not be empty")
     task, repo = verify_prepared_task(store, run_id, task_id)
 
+    provider = provider_for(repo)
     command = [
         "gh",
         "pr",
@@ -44,6 +46,34 @@ def pull_request_plan(
         command.extend(["--body", ""])
     if draft:
         command.append("--draft")
+
+    if provider.name == "gitlab":
+        location = provider.location
+        command = [
+            "glab",
+            "mr",
+            "create",
+            "--repo",
+            f"{location.host}/{location.project}",
+            "--source-branch",
+            task["branch"],
+            "--target-branch",
+            repo["profile"]["defaultBranch"],
+            "--title",
+            title,
+            "--description",
+            body_file.read_text(encoding="utf-8") if body_file else "",
+            "--yes",
+        ]
+        if draft:
+            command.append("--draft")
+    else:
+        location = provider.location
+        command[command.index("--repo") + 1] = (
+            location.project
+            if location.host == "github.com"
+            else f"{location.host}/{location.project}"
+        )
 
     return {
         "task": task_id,

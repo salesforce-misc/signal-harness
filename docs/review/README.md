@@ -25,6 +25,12 @@ The same helper reviews a distribution with its own rules:
 ```
 
 Use a new output directory each time. The command uses the existing Codex login
+and sends the prepared source bundle to that account's configured Codex service.
+The automatic runner currently supports the OpenAI Codex provider. For other
+agents or model providers, use the local `prepare`/`validate` flow described
+below and run the analysis with your chosen agent.
+
+The automatic command uses the existing Codex login
 and its default model; it starts two ephemeral read-only sessions, one for
 analysis and one for independent verification. It does not post or run tests.
 For agent-directed review, invoke `$harness-code-review` from either repository

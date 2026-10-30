@@ -39,7 +39,7 @@ class FlakyProvider(RecordingProvider):
     def send(self, event: dict) -> str:
         self.calls.append(event)
         if len(self.calls) == 1:
-            raise RuntimeError("temporary provider failure")
+            raise RuntimeError("temporary provider failure token=synthetic-private-value")
         return f"external-{event['id']}"
 
 
@@ -139,14 +139,14 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(len(work_items.calls), 1)
 
         record_external_id(
-            self.fixture.store, "runtime-run", "work_items", "work-item", "W-12345678"
+            self.fixture.store, "runtime-run", "work_items", "work-item", "ITEM-12345678"
         )
         record_external_id(
-            self.fixture.store, "runtime-run", "work_items", "work-item", "W-12345678"
+            self.fixture.store, "runtime-run", "work_items", "work-item", "ITEM-12345678"
         )
         with self.assertRaisesRegex(ResolutionError, "already mapped"):
             record_external_id(
-                self.fixture.store, "runtime-run", "work_items", "work-item", "W-99999999"
+                self.fixture.store, "runtime-run", "work_items", "work-item", "ITEM-99999999"
             )
 
         resolved = resolve_human_input(
@@ -191,6 +191,9 @@ class IntegrationTests(unittest.TestCase):
         )
         provider = FlakyProvider()
         failed = dispatch_outbox(self.fixture.store, "runtime-run", {"slack": provider})
+        persisted = self.fixture.store.state_path("runtime-run").read_text()
+        self.assertNotIn("synthetic-private-value", persisted)
+        self.assertIn("[REDACTED]", persisted)
         retried = dispatch_outbox(self.fixture.store, "runtime-run", {"slack": provider})
         replay = dispatch_outbox(self.fixture.store, "runtime-run", {"slack": provider})
 
@@ -202,10 +205,10 @@ class IntegrationTests(unittest.TestCase):
     def test_slack_and_work_items_lifecycle_events_share_the_replay_safe_outbox(self) -> None:
         events = (
             ("slack-review-42", "slack", "pull-request.review-requested"),
-            ("work_items-drive", "work_items", "work-item.drive.upsert"),
+            ("work_items-drive", "work_items", "work-item.feature.upsert"),
             ("work_items-stage-2", "work_items", "work-item.stage.transition"),
             ("work_items-task-1", "work_items", "work-item.task.upsert"),
-            ("work_items-chatter-1", "work_items", "work-item.chatter.post"),
+            ("work_items-chatter-1", "work_items", "work-item.comment.post"),
         )
         for event_id, channel, kind in events:
             enqueue_integration_event(
@@ -221,7 +224,7 @@ class IntegrationTests(unittest.TestCase):
             "runtime-run",
             event_id="work_items-drive",
             channel="work_items",
-            kind="work-item.drive.upsert",
+            kind="work-item.feature.upsert",
             payload={"feature": "fixture"},
         )
 
