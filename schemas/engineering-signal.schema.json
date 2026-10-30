@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:signal-engineering-harness:schema:engineering-signal:v1alpha1",
+  "title": "Engineering Signal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "kind", "source", "repository", "status", "summary"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "kind": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "repository": { "type": "string", "minLength": 1 },
+    "status": {
+      "enum": ["pass", "fail", "warn", "info", "unknown"]
+    },
+    "summary": { "type": "string", "minLength": 1 },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "metadata": { "type": "object" }
+  }
+}

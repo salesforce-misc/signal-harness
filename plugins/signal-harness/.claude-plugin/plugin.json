@@ -1,0 +1,10 @@
+{
+  "name": "signal-harness",
+  "version": "0.4.0",
+  "description": "Signal-driven engineering authoring and assurance harness",
+  "author": {
+    "name": "Signal Harness Maintainers"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["engineering-signals", "sdd", "assurance", "multi-repo", "development"]
+}

@@ -1,0 +1,11 @@
+apiVersion: signal-harness.io/v1alpha1
+kind: Distribution
+
+metadata:
+  name: fixture
+  version: 1.0.0
+
+spec:
+  requiresCore: ">=0.9,<0.10"
+  profileApi: signal-harness/v1alpha1
+  policy: ../policy

@@ -1,0 +1,79 @@
+apiVersion: signal-harness/v1alpha1
+kind: Workflow
+id: fixture-sdd
+version: "1.0"
+
+stages:
+  - id: "0"
+    name: Specify
+    objective: Produce an approved, self-contained specification.
+    activities:
+      - Resolve behavior, boundaries, compatibility, and rollout decisions.
+    gate:
+      kind: pr
+      evidenceType: specification
+      clearsWhen: The specification is approved and merged.
+
+  - id: "1"
+    name: Decompose
+    objective: Produce an approved repository-routed task graph.
+    activities:
+      - Assign every task and dependency to an explicit repository.
+    gate:
+      kind: pr
+      evidenceType: task-plan
+      clearsWhen: The task plan is approved and merged.
+
+  - id: "2"
+    name: Implement
+    objective: Implement each task using repository-owned verification commands.
+    perTask: true
+    activities:
+      - Record RED, GREEN, and REFACTOR evidence.
+    gate:
+      kind: automatic
+      evidenceType: tdd
+      waivableInEvaluation: true
+      clearsWhen: Required task verification passes.
+
+  - id: "3"
+    name: Review
+    objective: Resolve automated and human findings.
+    perTask: true
+    activities:
+      - Persist findings, resolutions, and rerun evidence.
+    gate:
+      kind: pr
+      clearsWhen: The task PR is approved and merged.
+
+  - id: "4"
+    name: Integrate
+    objective: Verify affected repository and service boundaries.
+    activities:
+      - Run declared integration and compatibility verification.
+    gate:
+      kind: human
+      evidenceType: integration
+      waivableInEvaluation: true
+      clearsWhen: A human records integration sign-off.
+
+  - id: "5"
+    name: Validate
+    objective: Exercise representative behavior in a suitable environment.
+    activities:
+      - Record happy-path, failure-path, and rollout evidence.
+    gate:
+      kind: human
+      evidenceType: smoke
+      waivableInEvaluation: true
+      clearsWhen: A human records validation sign-off.
+
+  - id: "6"
+    name: Learn
+    objective: Preserve reusable decisions and follow-up work.
+    activities:
+      - Persist learning and architecture artifacts.
+    gate:
+      kind: automatic
+      evidenceType: knowledge
+      clearsWhen: Required learning artifacts are persisted.

@@ -1,0 +1,28 @@
+apiVersion: signal-harness/v1alpha1
+kind: Workspace
+
+feature: replace-with-feature-id
+sponsor: service-a
+workflow: policy-pack/sdd.yaml
+
+selection:
+  include:
+    - service-a
+    - service-b
+  exclude: []
+
+repositories:
+  service-a:
+    remote: replace-with-org/replace-with-service-a
+    mode: read-write
+    author: true
+    featureManifest: replace-with-repository-relative-manifest.yaml
+  service-b:
+    remote: replace-with-org/replace-with-service-b
+    mode: read-only
+    author: false
+
+tasks:
+  - id: implement-feature
+    repo: service-a
+    description: Discover affected boundaries, then implement and verify the feature.

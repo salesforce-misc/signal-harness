@@ -1,0 +1,12 @@
+apiVersion: signal-harness/v1alpha1
+kind: RepositoryCatalog
+id: fixture-distribution
+workflow: sdd.yaml
+
+repositories:
+  service-a:
+    remote: example-org/service-a
+    author: true
+  service-b:
+    remote: example-org/service-b
+    author: true

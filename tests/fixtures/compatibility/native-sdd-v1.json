@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "description": "Synthetic compatibility contract for a repository-local SDD workflow.",
+  "nativeSources": [
+    {"repository": "service-a", "paths": ["AGENTS.md", "specs/example/manifest.yaml"]},
+    {"repository": "service-b", "paths": ["AGENTS.md"]}
+  ],
+  "workflow": [
+    {"id": "0", "gate": "approved-and-merged-pr", "artifact": "specification"},
+    {"id": "1", "gate": "approved-and-merged-pr", "artifact": "task-plan"},
+    {"id": "2", "gate": "automatic-tdd-evidence", "perTask": true},
+    {"id": "3", "gate": "approved-and-merged-pr", "perTask": true},
+    {"id": "4", "gate": "human-signoff", "artifact": "integration-evidence"},
+    {"id": "5", "gate": "human-signoff", "artifact": "smoke-evidence"},
+    {"id": "6", "gate": "automatic-artifact", "artifact": "knowledge-capture"}
+  ]
+}

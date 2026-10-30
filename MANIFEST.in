@@ -1,0 +1,2 @@
+recursive-include templates *.md *.yaml
+recursive-include schemas *.json

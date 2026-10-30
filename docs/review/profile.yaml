@@ -1,0 +1,24 @@
+version: 1
+repository: signal-engineering-harness
+context: [pyproject.toml, src/signal_harness/__init__.py]
+documents:
+  - docs/review/rules.md
+  - docs/review/contracts.md
+  - docs/review/testing.md
+  - docs/review/severity-map.md
+checks:
+  - id: general-correctness
+    paths: ['*']
+    documents: [docs/review/rules.md, docs/review/severity-map.md]
+  - id: engine-correctness
+    paths: ['*.py', '*.json', '*.yaml', '*.yml', '*.toml', '*.lock', '*.env', '*.sh', 'scripts/*']
+    documents: [docs/review/rules.md, docs/review/contracts.md, docs/review/testing.md]
+  - id: executable-instructions
+    paths: ['plugins/*', '.agents/*', '.claude-plugin/*', 'AGENTS.md', 'CLAUDE.md', 'templates/*']
+    documents: [docs/review/rules.md, docs/review/contracts.md]
+  - id: review-policy
+    paths: ['docs/review/*', 'AGENTS.md', 'CLAUDE.md']
+    documents: [docs/review/rules.md, docs/review/severity-map.md]
+  - id: documentation-consistency
+    paths: ['*.md']
+    documents: [docs/review/contracts.md]

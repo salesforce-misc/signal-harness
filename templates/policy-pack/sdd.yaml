@@ -1,0 +1,113 @@
+apiVersion: signal-harness/v1alpha1
+kind: Workflow
+id: replace-with-workflow-id
+version: "1.0"
+
+stages:
+  - id: "0"
+    name: Specify
+    objective: Produce an approved, self-contained specification.
+    activities:
+      - Resolve behavior, boundaries, compatibility, and rollout decisions.
+      - Record consulted and missing sources, delegation findings, and zero unresolved delegations in the specification source audit.
+      - From sponsor evidence, lazily engage only feature-relevant catalog repositories; inspect current code and lock the exact affected APIs, events, schemas, generated clients, configuration, and callers as evidence.
+      - Record affected delivery surfaces, owners, compatibility identities, and source evidence.
+      - Search current code for a working precedent for every affected surface and record reuse, adaptation, or no precedent.
+    gate:
+      kind: pr
+      evidenceType: specification
+      requirements:
+        callerMatrix: true
+        surfaceAuditKinds:
+          - behavior
+          - contract
+          - configuration
+          - infrastructure
+          - persistence
+          - observability
+          - verification
+          - rollout
+        preflightChecks:
+          - source-readability
+          - build-bootstrap
+          - infrastructure-readability
+          - integration-startup
+      clearsWhen: The specification is approved and merged.
+
+  - id: "1"
+    name: Decompose
+    objective: Produce an approved repository-routed task graph.
+    activities:
+      - Convert discovered interface impact into repository-routed tasks; do not rely on a pre-registered contract inventory.
+      - Assign every task and dependency to an explicit repository.
+      - Close every discovered surface through a task, evidenced no-change decision, or governed defer.
+      - Declare produced and consumed artifacts for cross-repository build dependencies.
+    gate:
+      kind: pr
+      evidenceType: task-plan
+      clearsWhen: The task plan is approved and merged.
+
+  - id: "2"
+    name: Implement
+    objective: Implement each task using repository-owned verification commands.
+    perTask: true
+    activities:
+      - Record RED, GREEN, and REFACTOR evidence for each behavior.
+    gate:
+      kind: automatic
+      evidenceType: tdd
+      clearsWhen: Required task verification passes.
+
+  - id: "3"
+    name: Review
+    objective: Resolve automated and human review findings.
+    perTask: true
+    activities:
+      - Persist findings, resolutions, and rerun evidence.
+      - Reconcile every task criterion and affected surface and record a passing privacy check.
+    gate:
+      kind: pr
+      evidenceType: review
+      requirements:
+        reviewDimensions:
+          - bounded-state
+          - fairness-starvation
+          - deadlock-ordering
+          - transaction-boundary
+          - failure-semantics
+          - compatibility
+          - observability
+      clearsWhen: The task PR is approved and merged.
+
+  - id: "4"
+    name: Integrate
+    objective: Verify affected repository and service boundaries.
+    activities:
+      - Run declared integration and compatibility verification.
+    gate:
+      kind: human
+      evidenceType: integration
+      waivableInEvaluation: true
+      clearsWhen: A human records integration sign-off.
+
+  - id: "5"
+    name: Validate
+    objective: Exercise representative behavior in a suitable environment.
+    activities:
+      - Record happy-path, failure-path, and rollout evidence.
+    gate:
+      kind: human
+      evidenceType: smoke
+      waivableInEvaluation: true
+      clearsWhen: A human records validation sign-off.
+
+  - id: "6"
+    name: Learn
+    objective: Preserve reusable decisions and follow-up work.
+    activities:
+      - Persist learning and architecture artifacts.
+      - For multi-repository task ownership, record rollback owner, unwind order, deployment order, and alerting.
+    gate:
+      kind: automatic
+      evidenceType: knowledge
+      clearsWhen: Required learning artifacts are persisted.

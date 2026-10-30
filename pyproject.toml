@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "signal-engineering-harness"
+version = "0.9.0"
+description = "Signal-driven, repository-aware engineering authoring and assurance harness"
+license = "Apache-2.0"
+license-files = ["LICENSE.txt"]
+requires-python = ">=3.11"
+dependencies = ["packaging>=24,<26", "PyYAML>=6.0"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/salesforce-misc/signal-harness"
+Repository = "https://github.com/salesforce-misc/signal-harness"
+Issues = "https://github.com/salesforce-misc/signal-harness/issues"
+
+[project.optional-dependencies]
+dev = [
+    "build>=1.2,<2",
+    "jsonschema>=4.23,<5",
+    "mypy>=1.15,<2",
+    "pytest>=8.3,<10",
+    "ruff>=0.16.10,<0.17",
+    "types-PyYAML>=6.0,<7",
+]
+
+[project.scripts]
+signal-harness = "signal_harness.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "SIM", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true

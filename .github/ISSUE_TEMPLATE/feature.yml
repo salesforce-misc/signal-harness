@@ -1,0 +1,36 @@
+name: Feature request
+description: Propose an engine, policy-pack, provider, or integration capability.
+title: "feature: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the engineering outcome that is currently difficult or unsafe.
+    validations:
+      required: true
+  - type: dropdown
+    id: boundary
+    attributes:
+      label: Proposed boundary
+      options:
+        - Core deterministic runtime
+        - Policy distribution
+        - Repository profile or context
+        - Authoring provider
+        - Assurance provider
+        - Learning provider
+        - Plugin or packaging
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome and evidence
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Safety, compatibility, and migration considerations

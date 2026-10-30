@@ -1,0 +1,39 @@
+name: Bug report
+description: Report reproducible incorrect or unsafe harness behavior.
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, production data, or security vulnerabilities here. Use the private security reporting flow for vulnerabilities.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: v0.3.0 or commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Include the command, sanitized inputs, and the smallest reproducible setup.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and evidence
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Repository-routing or safety impact
+      description: State whether the bug could affect repository selection, permissions, commands, state, evidence, or mutations.

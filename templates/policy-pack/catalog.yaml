@@ -1,0 +1,12 @@
+apiVersion: signal-harness/v1alpha1
+kind: RepositoryCatalog
+id: replace-with-organization-or-product-id
+workflow: sdd.yaml
+
+repositories:
+  service-a:
+    remote: replace-with-org/replace-with-service-a
+    author: true
+  service-b:
+    remote: replace-with-org/replace-with-service-b
+    author: false

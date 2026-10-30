@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "signal-engineering-harness",
+  "description": "Signal-driven engineering authoring and assurance entrypoints",
+  "owner": {
+    "name": "Signal Engineering Harness Maintainers"
+  },
+  "plugins": [
+    {
+      "name": "signal-harness",
+      "description": "Signal-driven, repository-aware engineering harness",
+      "author": {
+        "name": "Signal Engineering Harness Maintainers"
+      },
+      "source": "./plugins/signal-harness",
+      "category": "development",
+      "strict": false
+    }
+  ]
+}

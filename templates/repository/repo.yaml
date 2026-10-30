@@ -1,0 +1,27 @@
+apiVersion: signal-harness/v1alpha1
+kind: RepositoryProfile
+
+repo:
+  id: replace-with-catalog-repository-id
+  remote: replace-with-org/replace-with-repository
+  defaultBranch: main
+
+context:
+  required:
+    - README.md
+  optional:
+    - AGENTS.md
+    - docs/**/*.md
+    - specs/**/*.md
+  exclude:
+    - build/**
+    - node_modules/**
+
+commands:
+  unit: replace-with-unit-test-command
+
+signals:
+  sources:
+    - id: unit-tests
+      kind: test
+      commandRef: unit

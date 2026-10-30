@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bundleId", "status", "verified", "summary", "checks", "files", "findings", "limitations", "limitationResolutions"],
+  "properties": {
+    "bundleId": {"type": "string"},
+    "status": {"type": "string", "enum": ["PASS", "BLOCK", "INCOMPLETE"]},
+    "verified": {"type": "boolean"},
+    "summary": {"type": "string"},
+    "checks": {"type": "array", "items": {"type": "string"}},
+    "files": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "limitationResolutions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["limitation", "explanation", "evidence"],
+        "properties": {
+          "limitation": {"type": "string"},
+          "explanation": {"type": "string"},
+          "evidence": {"type": "string"}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule", "severity", "confidence", "file", "side", "line", "title", "evidence", "fix"],
+        "properties": {
+          "rule": {"type": "string"},
+          "severity": {"type": "string", "enum": ["critical", "warning", "suggestion"]},
+          "confidence": {"type": "integer", "minimum": 0, "maximum": 100},
+          "file": {"type": "string"},
+          "side": {"type": "string", "enum": ["LEFT", "RIGHT"]},
+          "line": {"type": "integer", "minimum": 1},
+          "title": {"type": "string"},
+          "evidence": {"type": "string"},
+          "fix": {"type": "string"}
+        }
+      }
+    }
+  }
+}
