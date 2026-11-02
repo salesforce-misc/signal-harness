@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import ast
 import json
 import tomllib
 from pathlib import Path
@@ -29,6 +30,36 @@ def validate(schema_name: str, document: Path) -> None:
     schema = load_json(ROOT / "schemas" / schema_name)
     Draft202012Validator.check_schema(schema)
     Draft202012Validator(schema).validate(load_yaml(document))
+
+
+def validate_release_versions(root: Path) -> str:
+    project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
+    version = project["project"]["version"]
+    module = ast.parse((root / "src/signal_harness/__init__.py").read_text(encoding="utf-8"))
+    module_versions = [
+        ast.literal_eval(node.value)
+        for node in module.body
+        if isinstance(node, ast.Assign)
+        and any(
+            isinstance(target, ast.Name) and target.id == "__version__" for target in node.targets
+        )
+    ]
+    if module_versions != [version]:
+        raise ValueError("module __version__ must match the Python package version")
+    skill_path = root / "plugins/signal-harness/skills/signal-harness/SKILL.md"
+    skill = skill_path.read_text(encoding="utf-8")
+    sections = skill.split("---", 2)
+    if len(sections) != 3 or sections[0].strip():
+        raise ValueError("authoring skill must declare YAML front matter")
+    front_matter = yaml.safe_load(sections[1])
+    metadata = front_matter.get("metadata") if isinstance(front_matter, dict) else None
+    if not isinstance(metadata, dict) or metadata.get("version") != version:
+        raise ValueError("plugin skill metadata.version must match the Python package version")
+    for runtime in ("claude", "codex"):
+        manifest = root / f"plugins/signal-harness/.{runtime}-plugin/plugin.json"
+        if load_json(manifest).get("version") != version:
+            raise ValueError(f"{runtime} plugin version must match the Python package version")
+    return version
 
 
 def main() -> None:
@@ -71,13 +102,7 @@ def main() -> None:
     if embedded:
         raise ValueError(f"consumer policy or examples must not ship in core: {embedded}")
 
-    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    version = project["project"]["version"]
-    skill = (ROOT / "plugins/signal-harness/skills/signal-harness/SKILL.md").read_text(
-        encoding="utf-8"
-    )
-    if f"version: {version}" not in skill:
-        raise ValueError("plugin skill version must match the Python package version")
+    version = validate_release_versions(ROOT)
     sdd_release = (ROOT / ".github/workflows/release-sdd.yml").read_text(encoding="utf-8")
     aial_release = (ROOT / ".github/workflows/release-aial.yml").read_text(encoding="utf-8")
     if '"sdd-v*"' not in sdd_release or '"aial-v*"' in sdd_release:

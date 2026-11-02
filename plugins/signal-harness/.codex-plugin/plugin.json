@@ -1,6 +1,6 @@
 {
   "name": "signal-harness",
-  "version": "0.4.0",
+  "version": "0.9.0",
   "description": "Signal-driven engineering authoring and assurance harness",
   "author": {
     "name": "Signal Harness Maintainers"

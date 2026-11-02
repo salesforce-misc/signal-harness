@@ -20,6 +20,8 @@ See the [delivery roadmap](docs/roadmap.md) for planned work.
 
 ### Fixed
 
+- Align Codex/Claude plugin versions with the 0.9.0 core and validate package,
+  module, authoring-skill front matter, and both plugin release identities in CI.
 - Redact notification-provider failure details before persisting them and redact
   structured sensitive keys and credential-bearing HTTP URLs.
 - Select GitHub or GitLab when generating change-request plans, including
