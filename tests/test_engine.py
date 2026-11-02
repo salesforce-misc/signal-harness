@@ -762,7 +762,7 @@ class RunStateTests(unittest.TestCase):
             self.store,
             "fixture-run",
             "producer",
-            "@W-12345678: publish contract",
+            "@ITEM-12345678: publish contract",
         )
 
         self.assertEqual(result["repo"], "service-a")

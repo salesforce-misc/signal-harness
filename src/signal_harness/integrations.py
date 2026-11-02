@@ -4,6 +4,7 @@ import re
 from typing import Any, Protocol
 
 from .errors import ConfigurationError, ResolutionError
+from .security import redact_text
 from .state import RunStore, utc_now
 
 SAFE_EXTERNAL_KEY = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._:-]*$")
@@ -202,7 +203,7 @@ def dispatch_outbox(
                 if not isinstance(external_id, str) or not external_id.strip():
                     raise ValueError("provider returned an empty external id")
             except Exception as exc:  # Provider failures are persisted for operator recovery.
-                item["lastError"] = str(exc)
+                item["lastError"] = redact_text(str(exc))
                 failed += 1
                 continue
             item.update({"status": "sent", "externalId": external_id, "sentAt": utc_now()})

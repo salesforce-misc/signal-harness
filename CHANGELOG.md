@@ -20,6 +20,15 @@ See the [delivery roadmap](docs/roadmap.md) for planned work.
 
 ### Fixed
 
+- Align Codex/Claude plugin versions with the 0.9.0 core and validate package,
+  module, authoring-skill front matter, and both plugin release identities in CI.
+- Redact notification-provider failure details before persisting them and redact
+  structured sensitive keys and credential-bearing HTTP URLs.
+- Select GitHub or GitLab when generating change-request plans, including
+  self-hosted repository identities.
+- Include GitLab CI configuration and recursively referenced local includes in
+  inferred repository context, with path containment and a file-count limit.
+
 - Sanitize and bound peer acquisition diagnostics before returning or persisting them.
 - Retry context-lock denial audit saves against fresh state on bounded revision conflicts,
   preserving concurrent host costs and the locked plan.

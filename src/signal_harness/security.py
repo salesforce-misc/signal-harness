@@ -50,6 +50,7 @@ def redact_text(value: str) -> str:
         redacted = pattern.sub("[REDACTED]", redacted)
     redacted = _SECRET_PATTERNS[4].sub(r"\1\2[REDACTED]", redacted)
     redacted = re.sub(r"\bglpat-[A-Za-z0-9_-]+", "[REDACTED]", redacted)
+    redacted = re.sub(r"(https?://)[^/\s@]+@", r"\1[REDACTED]@", redacted)
     return redacted
 
 
@@ -61,7 +62,15 @@ def redact_value(value: Any) -> Any:
     if isinstance(value, tuple):
         return [redact_value(item) for item in value]
     if isinstance(value, dict):
-        return {key: redact_value(item) for key, item in value.items()}
+        return {
+            key: "[REDACTED]"
+            if re.fullmatch(
+                r"(?i)(password|passwd|token|secret|api[_-]?key|access[_-]?token|authorization)",
+                str(key),
+            )
+            else redact_value(item)
+            for key, item in value.items()
+        }
     return value
 
 

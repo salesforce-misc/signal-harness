@@ -63,6 +63,7 @@ def remote_location(value: str) -> RemoteLocation:
 
 class ReviewProvider(Protocol):
     name: str
+    location: RemoteLocation
 
     def open(
         self,
