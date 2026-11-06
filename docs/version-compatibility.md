@@ -1,8 +1,8 @@
 # Version compatibility
 
 The SDD CLI and agent entrypoints are released together under `sdd-v*` and use
-the same package version. AIAL is released independently under `aial-v*` from
-the same repository. Repository-owned profiles and workspaces use versioned API
+the same package version. AIAL is planned and has no implementation or release
+workflow in this checkout. Repository-owned profiles and workspaces use versioned API
 identifiers so they do not need to copy either engine pipeline.
 
 | SDD release | Python | State | Schemas/profile API | Policy workflow | Codex/Claude plugin |
@@ -57,8 +57,8 @@ Compatibility rules:
 
 - Install the CLI and plugin from the same `sdd-v*` tag or commit with
   `scripts/install.py`; mixed plugin/CLI minor versions are unsupported.
-- AIAL consumers select only `aial-v*`; SDD consumers select only `sdd-v*`.
-  A release from the other component is not an available dependency update.
+- SDD consumers select only `sdd-v*`. The `aial-v*` namespace is reserved for
+  a future independent AIAL implementation and is not currently available.
 - State version 1 is readable across the listed releases. New optional fields
   are additive; a future incompatible state change requires a migration and a
   new state version.

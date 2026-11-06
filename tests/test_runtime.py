@@ -1,3 +1,18 @@
+# Copyright (c) 2026 Salesforce, Inc.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import annotations
 
 import json
@@ -1027,6 +1042,34 @@ class GitHubResumeTests(unittest.TestCase):
         self.assertFalse(result["advanced"])
         self.assertEqual(result["reason"], "ci-failed")
         self.assertEqual(result["pullRequest"]["checks"][0]["status"], "fail")
+
+    def test_failed_publish_redacts_diagnostics_without_marking_published(self) -> None:
+        task = self.fixture.store.load("runtime-run")["tasks"]["implementation"]
+        worktree = Path(task["worktree"])
+        (worktree / "change.txt").write_text("implemented\n", encoding="utf-8")
+        run("git", "add", "change.txt", cwd=worktree)
+        run("git", "commit", "-m", "implement behavior", cwd=worktree)
+        diagnostic = "denied https://user:url-credential@host/repo token=assignment-credential"
+        for stream in ("stdout", "stderr"):
+            with self.subTest(stream=stream):
+                runner = Mock(
+                    return_value=subprocess.CompletedProcess(
+                        [],
+                        1,
+                        diagnostic if stream == "stdout" else "",
+                        diagnostic if stream == "stderr" else "",
+                    )
+                )
+                with self.assertRaises(ResolutionError) as raised:
+                    publish_branch(
+                        self.fixture.store, "runtime-run", "implementation", runner=runner
+                    )
+                self.assertIn("git push failed", str(raised.exception))
+                self.assertIn("[REDACTED]", str(raised.exception))
+                self.assertNotIn("url-credential", str(raised.exception))
+                self.assertNotIn("assignment-credential", str(raised.exception))
+                saved_task = self.fixture.store.load("runtime-run")["tasks"]["implementation"]
+                self.assertNotIn("publishedHead", saved_task)
 
     def test_publish_requires_a_clean_session_commit_and_is_idempotent(self) -> None:
         task = self.fixture.store.load("runtime-run")["tasks"]["implementation"]

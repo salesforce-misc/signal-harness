@@ -7,9 +7,9 @@ isolation, and PR routing. It intentionally does not contain a company's
 service catalog, engineering policy, repository rules, or user-facing feature
 command.
 
-This README focuses on the SDD consumption model. The repository can also host
-independently released assurance capabilities, but those do not change how an
-SDD consumer is layered or invoked.
+This release contains the SDD engine and provider-neutral assurance interfaces.
+The AIAL implementation and its independent releases are planned and are not
+included in this checkout.
 
 > **Feature developers do not invoke `signal-harness` directly.** Install and
 > use the command or agent entrypoint supplied by your team distribution. The

@@ -12,9 +12,9 @@
   remains external; core contains neither a live service interaction graph nor
   an API inventory. Discovery is sponsor-first and incremental in core 0.9.
 - Releases: `pyproject.toml`, module version, skill metadata, and `uv.lock`
-  agree. SDD uses `sdd-v*`; AIAL uses `aial-v*`. Only inspect an AIAL capability
-  if present in the reviewed revision; a release workflow reference does not
-  establish that its implementation exists.
+  agree. SDD uses `sdd-v*`. AIAL is planned and has no implementation or release
+  workflow in this checkout; a future implementation must establish its own
+  independent release contract.
 
 For changes to rules, distinguish current contract from a proposed migration.
 A PR editing this document does not authorize itself to bypass current rules.

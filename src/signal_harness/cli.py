@@ -1,3 +1,18 @@
+# Copyright (c) 2026 Salesforce, Inc.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import annotations
 
 import argparse
@@ -28,7 +43,7 @@ from .planner import build_plan, load_profile, resolve_profile_path
 from .pull_requests import pull_request_plan
 from .retention import delete_run
 from .sdd import build_sdd_plan, release_sdd_plan
-from .security import approve_command, record_cost
+from .security import approve_command, record_cost, redact_text
 from .session import (
     acknowledge_task_context,
     context_bundle,
@@ -1181,7 +1196,7 @@ def main(argv: list[str] | None = None) -> int:
         args = parser().parse_args(raw_args)
         return args.handler(args)
     except (HarnessError, argparse.ArgumentTypeError) as exc:
-        print(f"{_program_name()}: error: {exc}", file=sys.stderr)
+        print(f"{_program_name()}: error: {redact_text(str(exc))}", file=sys.stderr)
         return 2
 
 
