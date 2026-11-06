@@ -20,6 +20,11 @@ See the [delivery roadmap](docs/roadmap.md) for planned work.
 
 ### Fixed
 
+- Add Salesforce Apache license notices and enforce them in CI. Clarify that
+  this release provides SDD and assurance interfaces; AIAL is planned, and its
+  inactive release workflow has been removed.
+- Redact failed publication, Git, GitHub, and final CLI error diagnostics before
+  exposing them to callers or terminal logs.
 - Align Codex/Claude plugin versions with the 0.9.0 core and validate package,
   module, authoring-skill front matter, and both plugin release identities in CI.
 - Redact notification-provider failure details before persisting them and redact

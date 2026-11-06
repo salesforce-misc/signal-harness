@@ -41,6 +41,21 @@ They must never appear in profiles, workspace manifests, provider payloads, or
 run state. Bearer tokens, common GitHub/AWS token shapes, and secret assignments
 are redacted from command output and audit event details before persistence.
 
+## AI providers and local artifacts
+
+The optional AI review runner sends the prepared source bundle to the configured
+Codex service using the operator's existing account. The bundle includes source
+and review context. Use an account and provider approved for the repositories
+being reviewed; the harness does not establish a separate data-processing
+agreement or a network isolation boundary. See the
+[review runner's data flow and isolation limits](review/README.md).
+
+Run state, context snapshots, worktrees, source bundles, and model logs can
+contain proprietary source or sensitive engineering information even after
+credential-pattern redaction. Keep them out of public commits, restrict access,
+and apply your organization's retention policy. Redaction is not a guarantee
+that arbitrary confidential content has been removed.
+
 ## Limits and audit
 
 Each run defaults to 1,800 seconds per command, 100 command executions, four

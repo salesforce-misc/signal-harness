@@ -37,14 +37,22 @@ python -m pip install -e '.[dev]'
 Run the same checks as CI before opening a pull request:
 
 ```shell
-ruff format --check src tests
-ruff check src tests
+ruff format --check src tests scripts plugins/signal-harness/skills/harness-code-review/scripts
+ruff check src tests scripts plugins/signal-harness/skills/harness-code-review/scripts
 mypy src/signal_harness
+python scripts/check_license_headers.py
 python scripts/validate_assets.py
 python scripts/install.py --runtime both --dry-run
-python -m unittest discover -s tests -v
+python -m pytest -q
 python -m build
 ```
+
+Salesforce-authored source and configuration files that support comments must
+carry the copyright and Apache license notice described in
+[the licensing guide](how_to_license.md). Keep executable shebangs first.
+`scripts/check_license_headers.py` checks the currently used Python, YAML, TOML,
+shell, and named configuration formats. Extend its file selection when adding
+another source language; JSON files do not support comments.
 
 Changes to schemas, policy files, state formats, CLI behavior, or plugin
 manifests must include compatibility coverage and an entry in `CHANGELOG.md`.
@@ -67,4 +75,5 @@ before their contribution can be accepted. All participation is governed by
 the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 See [docs/roadmap.md](docs/roadmap.md) for milestone ownership and cutover
-criteria.
+criteria, and [publication readiness](docs/publication.md) for administrator
+setup and the final release checks.

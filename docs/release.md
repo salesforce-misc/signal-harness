@@ -1,18 +1,12 @@
 # Component releases
 
-Signal Engineering Harness keeps SDD and AIAL in one repository while
-publishing them as independently versioned components. Consumers select an
-immutable component tag rather than `main` or the repository's newest release.
+This checkout publishes the SDD engine and provider-neutral assurance interfaces.
+Consumers select an immutable `sdd-v*` tag rather than `main` or the repository's
+newest release. The AIAL implementation and releases are planned, not available.
 
 | Component | Version source | Tag | Artifact |
 | --- | --- | --- | --- |
 | SDD | `pyproject.toml` | `sdd-vVERSION` | Python wheel, source archive, checksums |
-| AIAL | `src/signal_harness/capabilities/aial/engine/manifest.json` | `aial-vVERSION` | deterministic AIAL engine archive, checksums |
-
-The shared repository is not a shared release train. An AIAL-only change can
-publish `aial-v0.2.1` without changing the SDD package version. An SDD consumer
-such as `acme-sdd` discovers only `sdd-v*`, so that AIAL release is invisible to
-its dependency automation.
 
 ## Publish SDD
 
@@ -31,24 +25,17 @@ its dependency automation.
    `main`, and passes the complete SDD gate again.
 5. The workflow publishes the checksummed Python wheel and source archive.
 
-## Publish AIAL
+## Planned AIAL releases
 
-1. Update the AIAL manifest, Node package metadata, and changelog version
-   through a pull request.
-2. Merge only after required AIAL quality, reproducibility, and Python
-   3.11–3.13 acceptance tests pass.
-3. Create and push the matching tag from the merged `main` commit:
+There is no AIAL release command or workflow in this checkout. Before enabling
+one, a reviewed implementation must supply its own version metadata, acceptance
+tests, reproducible artifact builder, and release workflow. Reserve `aial-v*`
+for that future component; do not publish placeholder tags.
 
-   ```shell
-   git fetch origin main
-   git tag -a aial-vVERSION origin/main -m "Signal Harness AIAL VERSION"
-   git push origin aial-vVERSION
-   ```
-
-4. `Release AIAL` checks that the tag matches the engine manifest and belongs
-   to `main`.
-5. The workflow builds the service-pack-free archive twice, rejects
-   non-deterministic output, and publishes the archive with checksums.
+The intended model keeps component releases independent. A future AIAL-only
+release must not increment the SDD package version or trigger SDD consumer
+updates. Assurance interfaces in the current Python package remain part of the
+SDD package's compatibility contract.
 
 Do not move or reuse a published tag. Correct a release by publishing the next
 version of that component only.
@@ -58,8 +45,7 @@ version of that component only.
 Routine dependency-update bots are intentionally disabled in this repository.
 The core is consumed through immutable component releases, so dependency changes
 must be proposed deliberately, reviewed with their compatibility impact, pass the
-complete required CI matrix, and ship in a new `sdd-v*` or `aial-v*` release as
-appropriate. Do not add a Dependabot or general-purpose Renovate schedule that
+complete required CI matrix, and ship in a new `sdd-v*` release. Do not add a Dependabot or general-purpose Renovate schedule that
 can create or auto-merge dependency changes independently of that release process.
 
 ## Consumer updates

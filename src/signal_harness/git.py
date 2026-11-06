@@ -1,3 +1,18 @@
+# Copyright (c) 2026 Salesforce, Inc.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import annotations
 
 import hashlib
@@ -12,6 +27,7 @@ from urllib.parse import unquote, urlsplit
 
 from .errors import ConfigurationError, ResolutionError
 from .forge import remote_location
+from .security import redact_text
 
 GIT_TIMEOUT_SECONDS = 120
 
@@ -40,7 +56,7 @@ def _git(root: Path, *args: str) -> str:
     completed = _git_process(["git", "-C", str(root), *args])
     if completed.returncode != 0:
         detail = completed.stderr.strip() or completed.stdout.strip()
-        raise ResolutionError(f"git {' '.join(args)} failed in {root}: {detail}")
+        raise ResolutionError(redact_text(f"git {' '.join(args)} failed in {root}: {detail}"))
     return completed.stdout.strip()
 
 
@@ -72,7 +88,9 @@ def is_ancestor(root: Path, ancestor: str, descendant: str = "HEAD") -> bool:
     )
     if completed.returncode not in {0, 1}:
         detail = completed.stderr.strip() or completed.stdout.strip()
-        raise ResolutionError(f"git merge-base --is-ancestor failed in {root}: {detail}")
+        raise ResolutionError(
+            redact_text(f"git merge-base --is-ancestor failed in {root}: {detail}")
+        )
     return completed.returncode == 0
 
 
@@ -140,7 +158,7 @@ def _run_git(*args: str, cwd: Path | None = None) -> str:
     completed = _git_process(command)
     if completed.returncode != 0:
         detail = completed.stderr.strip() or completed.stdout.strip()
-        raise ResolutionError(f"{' '.join(command)} failed: {detail}")
+        raise ResolutionError(redact_text(f"{' '.join(command)} failed: {detail}"))
     return completed.stdout.strip()
 
 

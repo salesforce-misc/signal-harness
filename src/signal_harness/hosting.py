@@ -1,3 +1,18 @@
+# Copyright (c) 2026 Salesforce, Inc.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import annotations
 
 import subprocess
@@ -8,6 +23,7 @@ from .errors import ResolutionError
 from .findings import review_readiness
 from .forge import CommandRunner, provider_for
 from .git import head_sha, is_dirty
+from .security import redact_text
 from .state import RunStore, utc_now
 from .worktrees import verify_prepared_task, verify_run_context
 
@@ -132,7 +148,7 @@ def publish_branch(
     )
     if completed.returncode != 0:
         detail = completed.stderr.strip() or completed.stdout.strip()
-        raise ResolutionError(f"git push failed: {detail}")
+        raise ResolutionError(f"git push failed: {redact_text(detail)}")
     state = store.load(run_id)
     state["tasks"][task_id]["publishedHead"] = revision
     state["tasks"][task_id]["publishedAt"] = utc_now()

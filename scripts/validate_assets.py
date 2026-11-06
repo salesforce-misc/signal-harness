@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+# Copyright (c) 2026 Salesforce, Inc.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import annotations
 
 import ast
@@ -104,11 +119,12 @@ def main() -> None:
 
     version = validate_release_versions(ROOT)
     sdd_release = (ROOT / ".github/workflows/release-sdd.yml").read_text(encoding="utf-8")
-    aial_release = (ROOT / ".github/workflows/release-aial.yml").read_text(encoding="utf-8")
     if '"sdd-v*"' not in sdd_release or '"aial-v*"' in sdd_release:
         raise ValueError("SDD releases must use only the sdd-v* tag namespace")
-    if '"aial-v*"' not in aial_release or '"sdd-v*"' in aial_release:
-        raise ValueError("AIAL releases must use only the aial-v* tag namespace")
+    if (ROOT / ".github/workflows/release-aial.yml").exists():
+        raise ValueError(
+            "AIAL is planned; do not enable its release workflow without implementation"
+        )
     if (ROOT / ".github/workflows/release.yml").exists():
         raise ValueError("the legacy repository-wide v* release workflow must not exist")
     if (ROOT / ".github/dependabot.yml").exists() or (ROOT / ".github/dependabot.yaml").exists():
