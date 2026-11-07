@@ -4,8 +4,10 @@ The [Salesforce OSS template](https://github.com/salesforce/oss-template) is the
 source for the root governance files and licensing instructions. Preserve
 `CODEOWNERS`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, `LICENSE.txt`, `README.md`,
 `SECURITY.md`, and `how_to_license.md` at the repository root. Keep the public
-ECCN and GUS metadata lines in `CODEOWNERS`; the actual approval record belongs
-in the approval system, not in public project files.
+ECCN and GUS metadata lines in `CODEOWNERS`. For this repository's approval,
+`#GUSINFO:` must contain the actual owning GUS Scrum Team and Product Tag,
+separated by a comma; do not substitute the template's Open Source placeholders.
+Keep the approval record itself in the approval system.
 
 ## Source validation
 
