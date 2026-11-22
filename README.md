@@ -11,6 +11,9 @@ This release contains the SDD engine and provider-neutral assurance interfaces.
 The AIAL implementation and its independent releases are planned and are not
 included in this checkout.
 
+For the seven-stage workflow, layer responsibilities, and runtime execution,
+start with the **[SDD architecture README](sdd/README.md)**.
+
 > **Feature developers do not invoke `signal-harness` directly.** Install and
 > use the command or agent entrypoint supplied by your team distribution. The
 > raw core CLI is for distribution authors, CI, conformance tests, and advanced
@@ -264,6 +267,7 @@ for configuration, runtime files, and conservative GitLab review gates.
 
 ## Further reading
 
+- [SDD architecture and seven-stage lifecycle](sdd/README.md)
 - [Architecture](docs/architecture.md)
 - [Core/distribution/repository design](docs/core-distribution-extension-design.md)
 - [Operations](docs/operations.md)

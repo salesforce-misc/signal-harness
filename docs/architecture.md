@@ -1,5 +1,8 @@
 # Architecture
 
+For the SDD-specific seven-stage lifecycle, layer responsibilities, and execution
+flow, start with the [SDD architecture README](../sdd/README.md).
+
 ## Product boundary
 
 The Signal Engineering Harness is a governed control layer around repositories,
