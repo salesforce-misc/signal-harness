@@ -1236,7 +1236,7 @@ class CentralWorkflowTests(unittest.TestCase):
         self.assertEqual(workflow.stages[4].gate.kind, "human")
 
     def test_external_policy_directory_resolves_its_workflow(self) -> None:
-        catalog = load_policy_catalog(Path("tests/fixtures/policy"))
+        catalog = load_policy_catalog(Path("tests/sdd/fixtures/policy"))
 
         self.assertEqual(catalog.id, "fixture-distribution")
         self.assertEqual(Path(catalog.workflow), Path(EXAMPLE_WORKFLOW).resolve())

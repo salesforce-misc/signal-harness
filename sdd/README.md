@@ -11,6 +11,19 @@ covers the shared runtime and the broader authoring, assurance, and learning
 boundaries. This release implements SDD and assurance interfaces; the separate
 AIAL implementation is planned.
 
+The implementation is grouped under [`signal_harness.sdd`](../src/signal_harness/sdd/).
+Reusable infrastructure lives under [`signal_harness.runtime`](../src/signal_harness/runtime/),
+which has no dependency on SDD stages or evidence validators. SDD run state
+extends the shared persistence store; repository profile types and engineering
+signals are reusable without loading the SDD engine. Existing flat Python module
+paths remain compatibility imports of the same implementation objects.
+
+SDD tests and fixtures live under [`tests/sdd/`](../tests/sdd/), templates under
+[`templates/sdd/`](../templates/sdd/), and schemas under
+[`schemas/sdd/`](../schemas/sdd/). Legacy template/schema paths remain validated
+compatibility copies for existing consumers. The public authoring plugin keeps
+its existing installation path.
+
 ## Who owns what
 
 The architecture separates a reusable engine from team policy and repository
@@ -32,8 +45,8 @@ flowchart TD
 | Layer | Owns | Key files |
 | --- | --- | --- |
 | Core engine | Workflow loading, context locking, task routing, permissions, worktree isolation, evidence validation, state, and PR/MR provider handling. | [`src/signal_harness/`](../src/signal_harness/), [`schemas/`](../schemas/), and the [shared authoring skill](../plugins/signal-harness/skills/signal-harness/SKILL.md). |
-| Team distribution | The installed workflow, repository catalog, team-wide instructions, integrations, compatible core version, and stable end-user command. | Consumer-owned `distribution.yaml`, policy `sdd.yaml`, catalog, and command/agent adapters. See the [distribution manifest fixture](../tests/fixtures/distribution/distribution.yaml) and [policy templates](../templates/policy-pack/). |
-| Repository | Service architecture, brownfield rules, specifications, context selection, and build/test commands. | Consumer-owned `.signal-harness/repo.yaml` and the files it references. See the [repository profile template](../templates/repository/repo.yaml). |
+| Team distribution | The installed workflow, repository catalog, team-wide instructions, integrations, compatible core version, and stable end-user command. | Consumer-owned `distribution.yaml`, policy `sdd.yaml`, catalog, and command/agent adapters. See the [distribution manifest fixture](../tests/sdd/fixtures/distribution/distribution.yaml) and [policy templates](../templates/sdd/policy-pack/). |
+| Repository | Service architecture, brownfield rules, specifications, context selection, and build/test commands. | Consumer-owned `.signal-harness/repo.yaml` and the files it references. See the [repository profile template](../templates/sdd/repository/repo.yaml). |
 
 In a **three-tier deployment**, each service owns its repository layer and the
 team maintains a separate distribution. In a **two-tier deployment**, one
@@ -45,7 +58,7 @@ Distribution authors use the core CLI to build and validate that integration.
 
 ## The seven stages
 
-The [reference workflow](../templates/policy-pack/sdd.yaml) defines the stages
+The [reference workflow](../templates/sdd/policy-pack/sdd.yaml) defines the stages
 below. Stages 0, 1, 4, 5, and 6 operate at feature scope; Stages 2 and 3 repeat
 for each routed task, respecting task dependencies.
 
@@ -83,9 +96,9 @@ the reviewed specification into implementation work.
 The gate kinds in the table describe the neutral template. At runtime, the
 selected distribution's YAML is authoritative for its activities, supported
 gates, evidence types, and additional requirements. The core validates that
-policy through [`workflow.py`](../src/signal_harness/workflow.py) and enforces
-its evidence contracts through [`lifecycle.py`](../src/signal_harness/lifecycle.py)
-and [`state.py`](../src/signal_harness/state.py).
+policy through [`workflow.py`](../src/signal_harness/sdd/workflow.py) and enforces
+its evidence contracts through [`lifecycle.py`](../src/signal_harness/sdd/lifecycle.py)
+and [`state.py`](../src/signal_harness/sdd/state.py).
 
 ## How the layers execute a feature
 
@@ -174,13 +187,13 @@ provider data flow, and local-artifact sensitivity.
 
 | Concern | Implementation or documentation |
 | --- | --- |
-| Workflow stages, gates, and requirement options | [Reference YAML](../templates/policy-pack/sdd.yaml), [workflow schema](../schemas/workflow.schema.json), [`workflow.py`](../src/signal_harness/workflow.py). |
-| Distribution compatibility and policy loading | [`distributions.py`](../src/signal_harness/distributions.py), [`catalog.py`](../src/signal_harness/catalog.py), [`sdd.py`](../src/signal_harness/sdd.py). |
-| Context discovery and immutable evidence | [`context.py`](../src/signal_harness/context.py), [`git.py`](../src/signal_harness/git.py), [`session.py`](../src/signal_harness/session.py). |
-| Task routing, worktrees, and artifact dependencies | [`planner.py`](../src/signal_harness/planner.py), [`worktrees.py`](../src/signal_harness/worktrees.py), [`artifact_handoff.py`](../src/signal_harness/artifact_handoff.py). |
-| TDD, command signals, gate validation, and recovery | [`tdd.py`](../src/signal_harness/tdd.py), [`verification.py`](../src/signal_harness/verification.py), [`lifecycle.py`](../src/signal_harness/lifecycle.py), [`state.py`](../src/signal_harness/state.py), [`control.py`](../src/signal_harness/control.py). |
-| PR/MR publication and external review state | [`hosting.py`](../src/signal_harness/hosting.py), [`forge.py`](../src/signal_harness/forge.py), [GitHub/GitLab provider guide](../docs/forge-providers.md). |
-| Team integrations and durable provider events | [`integrations.py`](../src/signal_harness/integrations.py), [operations](../docs/operations.md). |
+| Workflow stages, gates, and requirement options | [Reference YAML](../templates/sdd/policy-pack/sdd.yaml), [workflow schema](../schemas/sdd/workflow.schema.json), [`workflow.py`](../src/signal_harness/sdd/workflow.py). |
+| Distribution compatibility and policy loading | [`distributions.py`](../src/signal_harness/sdd/distributions.py), [`catalog.py`](../src/signal_harness/sdd/catalog.py), [SDD discovery entrypoint](../src/signal_harness/sdd/__init__.py). |
+| Context discovery and immutable evidence | [`context.py`](../src/signal_harness/runtime/context.py), [`git.py`](../src/signal_harness/runtime/git.py), [`session.py`](../src/signal_harness/sdd/session.py). |
+| Task routing, worktrees, and artifact dependencies | [`planner.py`](../src/signal_harness/sdd/planner.py), [`worktrees.py`](../src/signal_harness/sdd/worktrees.py), [`artifact_handoff.py`](../src/signal_harness/sdd/artifact_handoff.py). |
+| TDD, command signals, gate validation, and recovery | [`tdd.py`](../src/signal_harness/sdd/tdd.py), [`verification.py`](../src/signal_harness/sdd/verification.py), [`lifecycle.py`](../src/signal_harness/sdd/lifecycle.py), [`state.py`](../src/signal_harness/sdd/state.py), [`control.py`](../src/signal_harness/sdd/control.py). |
+| PR/MR publication and external review state | [`hosting.py`](../src/signal_harness/sdd/hosting.py), [`forge.py`](../src/signal_harness/runtime/forge.py), [GitHub/GitLab provider guide](../docs/forge-providers.md). |
+| Team integrations and durable provider events | [`integrations.py`](../src/signal_harness/runtime/integrations.py), [operations](../docs/operations.md). |
 
 To adopt the engine, start with the root README's
 [distribution setup](../README.md#distribution-owners-onboard-to-the-engine)

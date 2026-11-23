@@ -1,6 +1,6 @@
 # Core interfaces and compatibility
 
-- CLI: `src/signal_harness/cli.py`; preserve arguments, output meaning, routing,
+- CLI: `src/signal_harness/sdd/cli.py`; preserve arguments, output meaning, routing,
   exit status, and agent-facing next actions or document a versioned migration.
 - Config: `schemas/`, `models.py`, `catalog.py`, `workflow.py`, and
   `distributions.py` must agree on required fields, defaults, rejected values,

@@ -156,7 +156,7 @@ This creates a separately versioned Python distribution with:
 - `src/acme_sdd/policy/sdd.yaml`, the consumer-owned SDD stages and gates;
 - `src/acme_sdd/policy/catalog.yaml`, the participating repository catalog;
 - `src/acme_sdd/cli.py`, a thin user command that delegates to the core; and
-- `templates/repository/repo.yaml`, the repository-profile starting point.
+- `templates/sdd/repository/repo.yaml`, the repository-profile starting point.
 
 The generated workflow is neutral. Replace it with the team's reviewed policy,
 add thin Codex or Claude entrypoints, add consumer compatibility tests, and pin

@@ -42,7 +42,7 @@ def load_yaml(path: Path) -> dict:
 
 
 def validate(schema_name: str, document: Path) -> None:
-    schema = load_json(ROOT / "schemas" / schema_name)
+    schema = load_json(ROOT / "schemas/sdd" / schema_name)
     Draft202012Validator.check_schema(schema)
     Draft202012Validator(schema).validate(load_yaml(document))
 
@@ -78,7 +78,7 @@ def validate_release_versions(root: Path) -> str:
 
 
 def main() -> None:
-    for schema_path in sorted((ROOT / "schemas").glob("*.json")):
+    for schema_path in sorted((ROOT / "schemas").rglob("*.json")):
         Draft202012Validator.check_schema(load_json(schema_path))
     review_skill = ROOT / "plugins/signal-harness/skills/harness-code-review"
     Draft202012Validator.check_schema(load_json(review_skill / "references/report.schema.json"))
@@ -91,15 +91,15 @@ def main() -> None:
     for check in review_profile.get("checks", []):
         if not set(check.get("documents", [])).issubset(review_documents):
             raise ValueError(f"review check has undeclared documents: {check.get('id')}")
-    validate("workflow.schema.json", ROOT / "templates/policy-pack/sdd.yaml")
+    validate("workflow.schema.json", ROOT / "templates/sdd/policy-pack/sdd.yaml")
     validate(
         "repository-catalog.schema.json",
-        ROOT / "templates/policy-pack/catalog.yaml",
+        ROOT / "templates/sdd/policy-pack/catalog.yaml",
     )
-    validate("workspace.schema.json", ROOT / "templates/workspace.yaml")
+    validate("workspace.schema.json", ROOT / "templates/sdd/workspace.yaml")
     validate(
         "distribution.schema.json",
-        ROOT / "tests/fixtures/distribution/distribution.yaml",
+        ROOT / "tests/sdd/fixtures/distribution/distribution.yaml",
     )
 
     forbidden_policy_roots = (
@@ -116,6 +116,14 @@ def main() -> None:
     ]
     if embedded:
         raise ValueError(f"consumer policy or examples must not ship in core: {embedded}")
+
+    # Legacy asset paths remain compatible while distributions adopt canonical paths.
+    for base in ("templates", "schemas"):
+        for canonical in (ROOT / base / "sdd").rglob("*"):
+            if canonical.is_file():
+                legacy = ROOT / base / canonical.relative_to(ROOT / base / "sdd")
+                if not legacy.is_file() or legacy.read_bytes() != canonical.read_bytes():
+                    raise ValueError(f"compatibility asset drift: {legacy}")
 
     version = validate_release_versions(ROOT)
     sdd_release = (ROOT / ".github/workflows/release-sdd.yml").read_text(encoding="utf-8")

@@ -13,29 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
+"""Compatibility import; implementation lives in signal_harness.sdd.retention."""
 
-import shutil
-from typing import Any
+import sys
 
-from .errors import ConfigurationError, ResolutionError
-from .state import RunStore
+from signal_harness.sdd import retention as _implementation
+from signal_harness.sdd.retention import _TERMINAL_STATUSES as _TERMINAL_STATUSES
+from signal_harness.sdd.retention import delete_run as delete_run
 
-_TERMINAL_STATUSES = {"cancelled", "complete", "evaluation-complete-with-waivers"}
-
-
-def delete_run(store: RunStore, run_id: str, *, confirmation: str) -> dict[str, Any]:
-    state = store.load(run_id)
-    if state.get("status") not in _TERMINAL_STATUSES:
-        raise ResolutionError("run deletion requires a terminal run")
-    expected = f"delete {run_id}"
-    if confirmation != expected:
-        raise ConfigurationError(f"deletion confirmation must exactly equal {expected!r}")
-    attached = [task_id for task_id, task in state.get("tasks", {}).items() if task.get("worktree")]
-    if attached:
-        raise ResolutionError(
-            "run deletion requires worktree cleanup first: " + ", ".join(sorted(attached))
-        )
-    run_dir = store.run_dir(run_id)
-    shutil.rmtree(run_dir)
-    return {"runId": run_id, "status": "deleted"}
+sys.modules[__name__] = _implementation

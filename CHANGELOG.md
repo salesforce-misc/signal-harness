@@ -9,6 +9,10 @@ See the [delivery roadmap](docs/roadmap.md) for planned work.
 
 ### Changed
 
+- Group SDD implementation, tests, templates, and schemas by capability. Extract
+  reusable persistence, repository profiles, and hosting infrastructure into
+  `signal_harness.runtime`, with a tested dependency boundary. Preserve existing
+  CLI commands, Python import paths, saved-run formats, and legacy asset paths.
 - `clear-gate` and its `advance` alias now require `--actor USER` for explicit
   gate attribution. Update existing invocations to supply the initiating actor.
 - Exact context file paths must use on-disk spelling so case aliases cannot

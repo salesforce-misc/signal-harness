@@ -21,9 +21,8 @@ from dataclasses import replace
 from pathlib import Path
 from uuid import uuid4
 
-from .catalog import RepositoryCatalog, load_policy_catalog
-from .errors import ConfigurationError, ResolutionError
-from .git import (
+from signal_harness.runtime.errors import ConfigurationError, ResolutionError
+from signal_harness.runtime.git import (
     _run_git,
     current_branch,
     default_repository_cache,
@@ -33,21 +32,22 @@ from .git import (
     origin_url,
     repository_root,
 )
-from .models import (
+from signal_harness.runtime.security import redact_text
+from signal_harness.sdd.catalog import RepositoryCatalog, load_policy_catalog
+from signal_harness.sdd.models import (
     RepositoryProfile,
     Workspace,
     WorkspaceRepository,
     WorkspaceTask,
 )
-from .planner import (
+from signal_harness.sdd.planner import (
     PlanningSnapshot,
     WorkspacePlan,
     load_profile,
     resolve_profile_path,
     resolve_workspace,
 )
-from .security import redact_text
-from .task_cards import TaskCard, discover_task_cards
+from signal_harness.sdd.task_cards import TaskCard, discover_task_cards
 
 
 def discover_feature_manifest(root: Path, feature: str) -> str:

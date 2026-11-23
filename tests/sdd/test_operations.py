@@ -38,7 +38,7 @@ from signal_harness.integrations import (
 from signal_harness.leases import claim_task, release_task
 from signal_harness.verification import run_verification
 from signal_harness.worktrees import prepare_task
-from tests.test_runtime import RuntimeFixture
+from tests.sdd.test_runtime import RuntimeFixture
 
 
 class RecordingProvider:

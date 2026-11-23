@@ -13,49 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
+"""Compatibility import; implementation lives in signal_harness.runtime.config."""
 
-from pathlib import Path
-from typing import Any
+import sys
 
-import yaml
+from signal_harness.runtime import config as _implementation
+from signal_harness.runtime.config import load_yaml as load_yaml
+from signal_harness.runtime.config import require_list as require_list
+from signal_harness.runtime.config import require_mapping as require_mapping
+from signal_harness.runtime.config import require_string as require_string
+from signal_harness.runtime.config import string_list as string_list
 
-from .errors import ConfigurationError
-
-
-def load_yaml(path: Path) -> dict[str, Any]:
-    if not path.is_file():
-        raise ConfigurationError(f"configuration file does not exist: {path}")
-
-    try:
-        value = yaml.safe_load(path.read_text(encoding="utf-8"))
-    except yaml.YAMLError as exc:
-        raise ConfigurationError(f"invalid YAML in {path}: {exc}") from exc
-
-    if not isinstance(value, dict):
-        raise ConfigurationError(f"configuration root must be a mapping: {path}")
-    return value
-
-
-def require_mapping(value: Any, field: str) -> dict[str, Any]:
-    if not isinstance(value, dict):
-        raise ConfigurationError(f"{field} must be a mapping")
-    return value
-
-
-def require_list(value: Any, field: str) -> list[Any]:
-    if not isinstance(value, list):
-        raise ConfigurationError(f"{field} must be a list")
-    return value
-
-
-def require_string(value: Any, field: str) -> str:
-    if not isinstance(value, str) or not value.strip():
-        raise ConfigurationError(f"{field} must be a non-empty string")
-    return value.strip()
-
-
-def string_list(value: Any, field: str) -> tuple[str, ...]:
-    if value is None:
-        return ()
-    return tuple(require_string(item, f"{field}[]") for item in require_list(value, field))
+sys.modules[__name__] = _implementation

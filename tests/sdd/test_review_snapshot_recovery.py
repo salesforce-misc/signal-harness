@@ -23,8 +23,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-import tests.test_review_planning_lifecycle as planning_fixtures
-import tests.test_review_regressions as review_fixtures
+import tests.sdd.test_review_planning_lifecycle as planning_fixtures
+import tests.sdd.test_review_regressions as review_fixtures
 from signal_harness import git
 from signal_harness.cli import main
 from signal_harness.control import _next_actions
@@ -33,7 +33,7 @@ from signal_harness.sdd import build_sdd_plan
 from signal_harness.security import record_cost
 from signal_harness.session import lock_discovery_context
 from signal_harness.state import RunStore
-from tests.test_engine import RepositoryFixture, run
+from tests.sdd.test_engine import RepositoryFixture, run
 
 
 class SnapshotRecoveryTests(unittest.TestCase):

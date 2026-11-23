@@ -24,25 +24,29 @@ Human feedback ─────┘             └──► Assurance ─┴─�
 
 ```text
 src/signal_harness/
-├── config.py, context.py, git.py, graph.py, models.py, state.py
-│   └── shared deterministic runtime
-├── planner.py, worktrees.py, session.py, verification.py
-│   └── agent-session authoring and repository command execution
-├── pull_requests.py, hosting.py, forge.py, github.py, gitlab.py
-│   └── explicit PR/MR planning, provider dispatch, guarded publication and resume
-├── control.py, integrations.py, leases.py, findings.py
-│   └── operator controls, durable waits, provider outbox, task claims, and findings
-├── security.py, retention.py, compatibility.py
-│   └── command policy, limits, redaction, deletion, and parity evidence
-├── catalog.py, sdd.py, workflow.py, lifecycle.py
-│   └── central policy loading, repository interaction scope, and gate state
-├── capabilities/
-│   ├── authoring.py
-│   ├── assurance.py
-│   └── learning.py
-└── signals/
-    ├── models.py
-    └── providers.py
+├── sdd/
+│   ├── __init__.py                 discovery entrypoint (legacy module API)
+│   ├── workflow.py, lifecycle.py   seven-stage policy and evidence
+│   ├── planner.py, state.py        task planning and SDD run state
+│   ├── session.py, worktrees.py    agent handoffs and routed worktrees
+│   ├── tdd.py, verification.py     implementation checks and signals
+│   ├── hosting.py                 task publication and PR/MR gates
+│   └── bootstrap.py, cli.py        onboarding and command handlers
+├── runtime/
+│   ├── profiles.py, context.py     repository facts and locked context
+│   ├── git.py, forge.py            Git access and host identity
+│   ├── github.py, gitlab.py        code-host adapters
+│   ├── persistence.py             atomic storage, locks, and audit journal
+│   └── security.py, integrations.py
+├── signals/                       shared engineering-signal contracts
+├── capabilities/                  authoring, assurance, learning interfaces
+└── *.py                           compatibility imports for existing consumers
+
+tests/sdd/                         SDD behavior, regression tests, and fixtures
+tests/runtime/                     shared review-tool tests
+templates/sdd/                     canonical SDD onboarding templates
+schemas/sdd/                       canonical SDD configuration schemas
+sdd/README.md                      SDD architecture entrypoint
 ```
 
 Assurance and learning remain extension contracts. The current runtime work

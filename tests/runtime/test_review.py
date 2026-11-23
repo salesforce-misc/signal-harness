@@ -27,7 +27,7 @@ from contextlib import contextmanager, redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 HELPER = ROOT / "plugins/signal-harness/skills/harness-code-review/scripts/review.py"
 spec = importlib.util.spec_from_file_location("review_helper", HELPER)
 assert spec and spec.loader

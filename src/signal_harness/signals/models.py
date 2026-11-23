@@ -19,8 +19,9 @@ from dataclasses import asdict, dataclass, field
 from enum import StrEnum
 from typing import Any
 
+from signal_harness.runtime.errors import ConfigurationError
+
 from ..config import require_list, require_mapping, require_string
-from ..errors import ConfigurationError
 
 
 class SignalStatus(StrEnum):

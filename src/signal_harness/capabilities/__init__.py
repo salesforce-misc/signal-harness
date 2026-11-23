@@ -15,8 +15,12 @@
 
 """Extensible authoring, assurance, and learning capability boundaries."""
 
-from .assurance import AssuranceCapability, AssuranceReport, QualityGateResult
-from .learning import LearningCandidate, LearningCapability
+from signal_harness.capabilities.assurance import (
+    AssuranceCapability,
+    AssuranceReport,
+    QualityGateResult,
+)
+from signal_harness.capabilities.learning import LearningCandidate, LearningCapability
 
 __all__ = [
     "AssuranceCapability",

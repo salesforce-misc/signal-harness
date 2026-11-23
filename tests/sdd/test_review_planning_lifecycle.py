@@ -30,7 +30,7 @@ from signal_harness.cli import main
 from signal_harness.errors import ResolutionError
 from signal_harness.sdd import build_sdd_plan, release_sdd_plan
 from signal_harness.state import RunStore
-from tests.test_engine import EXAMPLE_WORKFLOW, RepositoryFixture, profile, run, write_yaml
+from tests.sdd.test_engine import EXAMPLE_WORKFLOW, RepositoryFixture, profile, run, write_yaml
 
 
 class PlanningLifecycleTests(unittest.TestCase):

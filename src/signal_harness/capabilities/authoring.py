@@ -15,8 +15,8 @@
 
 """The current SDD implementation exposed as the authoring capability."""
 
-from ..planner import WorkspacePlan, build_plan
-from ..pull_requests import pull_request_plan
-from ..worktrees import prepare_task
+from signal_harness.sdd.planner import WorkspacePlan, build_plan
+from signal_harness.sdd.pull_requests import pull_request_plan
+from signal_harness.sdd.worktrees import prepare_task
 
 __all__ = ["WorkspacePlan", "build_plan", "prepare_task", "pull_request_plan"]
