@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:signal-engineering-harness:schema:workflow:v1alpha1",
+  "title": "Signal Engineering Harness Workflow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "id", "version", "stages"],
+  "properties": {
+    "apiVersion": { "const": "signal-harness/v1alpha1" },
+    "kind": { "const": "Workflow" },
+    "id": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "objective", "activities", "gate"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "objective": { "type": "string", "minLength": 1 },
+          "activities": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "perTask": { "type": "boolean", "default": false },
+          "gate": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "clearsWhen"],
+            "properties": {
+              "kind": { "enum": ["automatic", "pr", "human"] },
+              "waivableInEvaluation": { "type": "boolean", "default": false },
+              "evidenceType": {
+                "enum": [
+                  "specification",
+                  "task-plan",
+                  "tdd",
+                  "review",
+                  "integration",
+                  "smoke",
+                  "knowledge"
+                ]
+              },
+              "requirements": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "callerMatrix": { "type": "boolean", "default": false },
+                  "literalAudit": { "type": "boolean", "default": false },
+                  "callerReconciliation": { "type": "boolean", "default": false },
+                  "placementAudit": { "type": "boolean", "default": false },
+                  "checkDerivation": { "type": "boolean", "default": false },
+                  "testTraceability": { "type": "boolean", "default": false },
+                  "reviewProvenance": { "type": "boolean", "default": false },
+                  "manifestClosure": { "type": "boolean", "default": false },
+                  "testCaseCategories": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": { "type": "string", "minLength": 1 }
+                  },
+                  "surfaceAuditKinds": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": { "type": "string", "minLength": 1 }
+                  },
+                  "preflightChecks": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": { "type": "string", "minLength": 1 }
+                  },
+                  "reviewDimensions": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": { "type": "string", "minLength": 1 }
+                  }
+                }
+              },
+              "clearsWhen": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -11,6 +11,9 @@ This release contains the SDD engine and provider-neutral assurance interfaces.
 The AIAL implementation and its independent releases are planned and are not
 included in this checkout.
 
+For the seven-stage workflow, layer responsibilities, and runtime execution,
+start with the **[SDD architecture README](sdd/README.md)**.
+
 > **Feature developers do not invoke `signal-harness` directly.** Install and
 > use the command or agent entrypoint supplied by your team distribution. The
 > raw core CLI is for distribution authors, CI, conformance tests, and advanced
@@ -153,7 +156,7 @@ This creates a separately versioned Python distribution with:
 - `src/acme_sdd/policy/sdd.yaml`, the consumer-owned SDD stages and gates;
 - `src/acme_sdd/policy/catalog.yaml`, the participating repository catalog;
 - `src/acme_sdd/cli.py`, a thin user command that delegates to the core; and
-- `templates/repository/repo.yaml`, the repository-profile starting point.
+- `templates/sdd/repository/repo.yaml`, the repository-profile starting point.
 
 The generated workflow is neutral. Replace it with the team's reviewed policy,
 add thin Codex or Claude entrypoints, add consumer compatibility tests, and pin
@@ -264,6 +267,7 @@ for configuration, runtime files, and conservative GitLab review gates.
 
 ## Further reading
 
+- [SDD architecture and seven-stage lifecycle](sdd/README.md)
 - [Architecture](docs/architecture.md)
 - [Core/distribution/repository design](docs/core-distribution-extension-design.md)
 - [Operations](docs/operations.md)

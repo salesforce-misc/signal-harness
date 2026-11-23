@@ -42,8 +42,8 @@ from signal_harness.sdd import build_sdd_plan
 from signal_harness.session import engage_repository, lock_discovery_context
 from signal_harness.state import RunStore
 from signal_harness.worktrees import prepare_task
-from tests.test_engine import EXAMPLE_WORKFLOW, RepositoryFixture, profile, write_yaml
-from tests.test_runtime import RuntimeFixture, run
+from tests.sdd.test_engine import EXAMPLE_WORKFLOW, RepositoryFixture, profile, write_yaml
+from tests.sdd.test_runtime import RuntimeFixture, run
 
 
 @pytest.mark.parametrize(

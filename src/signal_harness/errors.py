@@ -13,18 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Compatibility import; implementation lives in signal_harness.runtime.errors."""
 
-class HarnessError(Exception):
-    """A user-actionable engine error."""
+import sys
 
+from signal_harness.runtime import errors as _implementation
+from signal_harness.runtime.errors import ConfigurationError as ConfigurationError
+from signal_harness.runtime.errors import HarnessError as HarnessError
+from signal_harness.runtime.errors import ResolutionError as ResolutionError
+from signal_harness.runtime.errors import SddError as SddError
 
-class ConfigurationError(HarnessError):
-    """Invalid repository or workspace configuration."""
-
-
-class ResolutionError(HarnessError):
-    """A repository or file could not be resolved safely."""
-
-
-# Compatibility for integrations written against the pre-extraction prototype.
-SddError = HarnessError
+sys.modules[__name__] = _implementation

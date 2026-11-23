@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:signal-engineering-harness:schema:repository-catalog:v1alpha1",
+  "title": "Signal Engineering Harness Repository Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "id", "workflow", "repositories"],
+  "properties": {
+    "apiVersion": { "const": "signal-harness/v1alpha1" },
+    "kind": { "const": "RepositoryCatalog" },
+    "id": { "type": "string", "minLength": 1 },
+    "workflow": { "type": "string", "minLength": 1 },
+    "repositories": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["remote"],
+        "properties": {
+          "remote": { "type": "string", "minLength": 1 },
+          "author": { "type": "boolean", "default": false }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "stringList": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  }
+}

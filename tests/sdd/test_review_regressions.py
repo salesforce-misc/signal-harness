@@ -38,8 +38,8 @@ from signal_harness.session import engage_repository, lock_discovery_context
 from signal_harness.state import RunStore, _canonical_hash
 from signal_harness.worktrees import _run_git as worktree_git
 from signal_harness.worktrees import cleanup_task, prepare_task, verify_run_context
-from tests.fixtures.legacy_08_serializer import legacy_discovery_plan
-from tests.test_engine import (
+from tests.sdd.fixtures.legacy_08_serializer import legacy_discovery_plan
+from tests.sdd.test_engine import (
     EXAMPLE_WORKFLOW,
     RepositoryFixture,
     merged_planning_evidence,
@@ -47,7 +47,7 @@ from tests.test_engine import (
     run,
     write_yaml,
 )
-from tests.test_runtime import RuntimeFixture
+from tests.sdd.test_runtime import RuntimeFixture
 
 
 class ReviewRegressionTests(unittest.TestCase):

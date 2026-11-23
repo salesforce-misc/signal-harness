@@ -25,7 +25,7 @@ from pathlib import Path
 
 import pytest
 
-import tests.test_review as review_tests
+import tests.runtime.test_review as review_tests
 
 pytestmark = pytest.mark.skipif(
     os.environ.get("SIGNAL_HARNESS_LIVE_REVIEW") != "1",

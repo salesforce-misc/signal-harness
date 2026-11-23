@@ -22,8 +22,8 @@ from pathlib import Path
 
 from signal_harness.compatibility import compare_snapshots, snapshot_plan, snapshot_run
 from signal_harness.planner import build_plan
-from tests import test_engine
-from tests.test_runtime import RuntimeFixture
+from tests.sdd import test_engine
+from tests.sdd.test_runtime import RuntimeFixture
 
 
 class CompatibilitySnapshotTests(unittest.TestCase):
@@ -71,7 +71,7 @@ class CompatibilitySnapshotTests(unittest.TestCase):
         )
 
     def test_checked_in_native_fixture_is_machine_readable(self) -> None:
-        fixture = Path("tests/fixtures/compatibility/native-sdd-v1.json")
+        fixture = Path("tests/sdd/fixtures/compatibility/native-sdd-v1.json")
         value = json.loads(fixture.read_text(encoding="utf-8"))
         self.assertEqual(value["schemaVersion"], 1)
         self.assertEqual(

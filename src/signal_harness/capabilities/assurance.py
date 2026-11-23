@@ -19,7 +19,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Protocol
 
-from ..signals import EngineeringSignal, SignalStatus
+from signal_harness.signals import EngineeringSignal, SignalStatus
 
 
 @dataclass(frozen=True)

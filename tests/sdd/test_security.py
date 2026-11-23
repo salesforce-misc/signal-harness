@@ -28,7 +28,7 @@ from signal_harness.retention import delete_run
 from signal_harness.security import approve_command, authorize_command, record_cost
 from signal_harness.verification import run_verification
 from signal_harness.worktrees import prepare_task
-from tests.test_runtime import RuntimeFixture
+from tests.sdd.test_runtime import RuntimeFixture
 
 
 class SecurityPolicyTests(unittest.TestCase):

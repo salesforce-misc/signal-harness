@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:signal-engineering-harness:schema:repository-profile:v1alpha1",
+  "title": "Signal Engineering Harness Repository Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "repo", "context"],
+  "properties": {
+    "apiVersion": { "const": "signal-harness/v1alpha1" },
+    "kind": { "const": "RepositoryProfile" },
+    "repo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "remote"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "remote": { "type": "string", "minLength": 1 },
+        "defaultBranch": { "type": "string", "default": "main" },
+        "forge": { "type": "string", "enum": ["github", "gitlab"] }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": { "$ref": "#/$defs/stringList" },
+        "optional": { "$ref": "#/$defs/stringList" },
+        "exclude": { "$ref": "#/$defs/stringList" }
+      }
+    },
+    "commands": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+    "signals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "kind"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "kind": { "type": "string", "minLength": 1 },
+              "commandRef": { "type": "string", "minLength": 1 },
+              "provider": { "type": "string", "minLength": 1 },
+              "config": { "type": "object" }
+            },
+            "anyOf": [
+              { "required": ["commandRef"] },
+              { "required": ["provider"] }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "stringList": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  }
+}
