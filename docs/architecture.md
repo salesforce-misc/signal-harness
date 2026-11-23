@@ -43,7 +43,7 @@ src/signal_harness/
 └── *.py                           compatibility imports for existing consumers
 
 tests/sdd/                         SDD behavior, regression tests, and fixtures
-tests/runtime/                     shared review-tool tests
+tests/runtime/                     repository identity and shared review-tool tests
 templates/sdd/                     canonical SDD onboarding templates
 schemas/sdd/                       canonical SDD configuration schemas
 sdd/README.md                      SDD architecture entrypoint
